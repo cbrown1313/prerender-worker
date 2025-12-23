@@ -1,17 +1,33 @@
 import puppeteer from "@cloudflare/puppeteer";
 
 const BOT_UA = [
+  // Search engines
   /Googlebot/i,
   /Google-InspectionTool/i,
   /Bingbot/i,
-  /DuckDuckBot/i,
+
+  // AI / LLM crawlers
+  /GPTBot/i,
+  /ChatGPT-User/i,
+  /ClaudeBot/i,
+  /Google-Extended/i,
+  /PerplexityBot/i,
+  /Amazonbot/i,
+  /meta-externalagent/i,
+
+  // Social previews
   /facebookexternalhit/i,
   /Twitterbot/i,
   /LinkedInBot/i,
   /Slackbot/i,
   /WhatsApp/i,
-  /XML[- ]?Sitemaps/i,
+
+  // SEO tools
+  /AhrefsBot/i,
+  /SemrushBot/i,
+  /MJ12bot/i,
   /Screaming Frog/i,
+  /XML[- ]?Sitemaps/i,
 ];
 
 const ORIGIN = "https://smart-sites-360.lovable.app";
