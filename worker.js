@@ -12,7 +12,7 @@ const BOT_UA = [
   /WhatsApp/i,
 ];
 
-const ORIGIN = "https://smartsites360.com";
+const ORIGIN = "https://smart-sites-360.lovable.app";
 
 export default {
   async fetch(req, env, ctx) {
