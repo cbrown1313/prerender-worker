@@ -1,0 +1,8 @@
+{
+  "name": "prerender-worker",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "@cloudflare/puppeteer": "^0.0.0"
+  }
+}
