@@ -10,8 +10,8 @@ const BOT_UA = [
   /LinkedInBot/i,
   /Slackbot/i,
   /WhatsApp/i,
-  /XML-Sitemaps/i,
-  /Screaming Frog SEO Spider/i,
+  /XML[- ]?Sitemaps/i,
+  /Screaming Frog/i,
 ];
 
 const ORIGIN = "https://smart-sites-360.lovable.app";
