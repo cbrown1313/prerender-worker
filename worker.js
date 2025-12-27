@@ -44,9 +44,14 @@ export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     const ua = req.headers.get("user-agent") || "";
-    const acceptsHtml = (req.headers.get("accept") || "").includes("text/html");
+    const accept = req.headers.get("accept") || "";
+    const likelyHtml =
+      accept.includes("text/html") ||
+      accept.includes("*/*") ||
+      accept === "" ||
+      req.method === "HEAD";
 
-    const isBot = acceptsHtml && BOT_UA.some(re => re.test(ua));
+    const isBot = BOT_UA.some(re => re.test(ua)) && likelyHtml;
 
     if (isBot) {
   const cache = caches.default;
