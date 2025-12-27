@@ -88,9 +88,11 @@ export default {
   debugRes.headers.set("x-prerender", "1");
   debugRes.headers.set("x-prerender-cache", hit ? "HIT" : "MISS");
 
+  return withDebugHeader(debugRes, "prerender-worker");
   return debugRes;
 }
 
-    return fetch(`${ORIGIN}${url.pathname}${url.search}`, req);
+    const normalRes = await fetch(`${ORIGIN}${url.pathname}${url.search}`, req);
+    return withDebugHeader(normalRes, "prerender-worker");
   }
 };
