@@ -43,6 +43,17 @@ function withDebugHeader(res, value) {
 export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
+
+    if (url.pathname.startsWith("/__worker_test")) {
+  return new Response("Worker is running ✅", {
+    status: 200,
+    headers: {
+      "content-type": "text/plain; charset=utf-8",
+      "x-worker": "prerender-worker"
+    }
+  });
+}
+    
     const ua = req.headers.get("user-agent") || "";
     const accept = req.headers.get("accept") || "";
     const likelyHtml =
