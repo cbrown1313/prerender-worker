@@ -41,39 +41,47 @@ export default {
     const isBot = acceptsHtml && BOT_UA.some(re => re.test(ua));
 
     if (isBot) {
-      const cache = caches.default;
-      const cacheKey = new Request(req.url, {
-        headers: { Accept: "text/html" }
-      });
+  const cache = caches.default;
+  const cacheKey = new Request(req.url, {
+    headers: { Accept: "text/html" }
+  });
 
-      let res = await cache.match(cacheKey);
+  let hit = true;
+  let res = await cache.match(cacheKey);
 
-      if (!res) {
-        const browser = await puppeteer.launch(env.BROWSER);
-        const page = await browser.newPage();
+  if (!res) {
+    hit = false;
 
-        await page.setUserAgent(ua);
-        await page.goto(`${ORIGIN}${url.pathname}${url.search}`, {
-          waitUntil: "networkidle0",
-          timeout: 30000
-        });
+    const browser = await puppeteer.launch(env.BROWSER);
+    const page = await browser.newPage();
 
-        const html = await page.content();
-        await browser.close();
+    await page.setUserAgent(ua);
+    await page.goto(`${ORIGIN}${url.pathname}${url.search}`, {
+      waitUntil: "networkidle2",
+      timeout: 30000
+    });
 
-        res = new Response(html, {
-          headers: {
-            "content-type": "text/html; charset=utf-8",
-            "cache-control": "public, max-age=900, stale-while-revalidate=86400",
-            "x-served-by": "cf-browser-rendering"
-          }
-        });
+    const html = await page.content();
+    await browser.close();
 
-        ctx.waitUntil(cache.put(cacheKey, res.clone()));
+    res = new Response(html, {
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+        "cache-control": "public, max-age=900, stale-while-revalidate=86400",
+        "x-served-by": "cf-browser-rendering"
       }
+    });
 
-      return res;
-    }
+    ctx.waitUntil(cache.put(cacheKey, res.clone()));
+  }
+
+// Header check
+  const debugRes = new Response(res.body, res);
+  debugRes.headers.set("x-prerender", "1");
+  debugRes.headers.set("x-prerender-cache", hit ? "HIT" : "MISS");
+
+  return debugRes;
+}
 
     return fetch(`${ORIGIN}${url.pathname}${url.search}`, req);
   }
