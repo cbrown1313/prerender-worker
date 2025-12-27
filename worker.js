@@ -32,6 +32,14 @@ const BOT_UA = [
 
 const ORIGIN = "https://smart-sites-360.lovable.app";
 
+
+function withDebugHeader(res, value) {
+  const out = new Response(res.body, res);
+  out.headers.set("x-worker", value);
+  return out;
+}
+
+
 export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
